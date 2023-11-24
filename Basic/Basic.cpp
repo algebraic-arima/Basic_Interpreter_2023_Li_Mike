@@ -101,6 +101,8 @@ void processLine(std::string line, Program &program, EvalState &state) {
       program.clear();
       state.Clear();
     } else if(op_str=="QUIT") {
+      program.clear();
+      state.Clear();
       exit(0);
     } else if(op_str=="HELP") {
       std::cout<<"Learn it yourself, do not count on anyone!\n";

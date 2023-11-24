@@ -45,7 +45,9 @@ void PrintStmt::execute(EvalState &state, Program &program) {
   std::cout<<value<<'\n';
 }
 
-InputStmt::InputStmt(std::string &_name) {name=_name;}
+InputStmt::InputStmt(std::string &_name) {
+  name=_name;
+}
 
 void InputStmt::execute(EvalState &state, Program &program) {
   int value;
@@ -64,6 +66,7 @@ void InputStmt::execute(EvalState &state, Program &program) {
   }
   value=exp->eval(state);
   state.setValue(name,value);
+  delete exp;
 }
 
 void EndStmt::execute(EvalState &state, Program &program) {

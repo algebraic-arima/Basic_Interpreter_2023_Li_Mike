@@ -17,7 +17,6 @@ Program::Program() = default;
 Program::~Program() = default;
 
 void Program::clear() {
-    // Replace this stub with your own code
     cur_line=-1;
     line_numbers.clear();
     line_strings.clear();
@@ -76,7 +75,7 @@ void Program::setParsedStatement(int lineNumber, Statement *stmt) {
 Statement *Program::getParsedStatement(int lineNumber) {
   auto it = lines.find(lineNumber);
   if (it == lines.end()) {
-    error("No such line number to get");
+    error("LINE NUMBER ERROR");
   } else {
     if (lines[lineNumber] >= line_statements.size())
       line_statements.resize(lines[lineNumber] + 1);
