@@ -12,6 +12,7 @@
 #include <vector>
 #include <set>
 #include <unordered_map>
+
 #include "statement.hpp"
 
 
@@ -72,7 +73,7 @@ public:
  * program in the correct sequence.
  */
 
-    void addSourceLine(int lineNumber, const std::string& line);
+    void addSourceLine(int lineNumber, const std::string &line);
 
 /*
  * Method: removeSourceLine
@@ -140,13 +141,20 @@ public:
 
     int getNextLineNumber(int lineNumber);
 
-    //more func to add
-    //todo
+    void run(EvalState &state, Program &program);
+
+    void list();
+
+    int cur_line=-1;
 
 private:
 
-    // Fill this in with whatever types and instance variables you need
-    //todo
+    std::vector<int> line_numbers;
+    std::vector<std::string> line_strings;
+    std::vector<Statement *> line_statements;
+    // lines that has been input
+    std::map<int, int> lines;// lines[k]: the position in vector of the number k, k is ordered
+    // lines that is current on run
 };
 
 #endif

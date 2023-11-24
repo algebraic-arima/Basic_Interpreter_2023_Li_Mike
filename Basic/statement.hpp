@@ -18,7 +18,7 @@
 #include "exp.hpp"
 #include "Utils/tokenScanner.hpp"
 #include "program.hpp"
-#include"parser.hpp"
+#include "parser.hpp"
 #include "Utils/error.hpp"
 #include "Utils/strlib.hpp"
 
@@ -84,5 +84,87 @@ public:
  * an Expression object), the class implementation must also
  * specify its own destructor method to free that memory.
  */
+
+class RemStmt : public Statement {
+
+public:
+    RemStmt()= default;
+    virtual ~RemStmt()=default;
+    virtual void execute(EvalState &state, Program &program) {};
+
+};
+
+class AssignStmt : public Statement {
+
+public:
+    AssignStmt(std::string &, Expression *);
+    virtual ~AssignStmt();
+    virtual void execute(EvalState &state, Program &program);
+
+private:
+    std::string name;
+    Expression *exp;
+
+};
+
+class PrintStmt : public Statement {
+
+public:
+    PrintStmt(Expression *);
+    virtual ~PrintStmt();
+    virtual void execute(EvalState &state, Program &program);
+
+private:
+    Expression *exp;
+
+};
+
+class InputStmt : public Statement {
+
+public:
+    InputStmt(std::string &);
+    virtual ~InputStmt()=default;
+    virtual void execute(EvalState &state, Program &program);
+
+private:
+    std::string name;
+
+};
+
+class EndStmt : public Statement {
+
+public:
+    EndStmt()=default;
+    virtual ~EndStmt()=default;
+    virtual void execute(EvalState &state, Program &program);
+
+};
+
+class GotoStmt : public Statement {
+
+public:
+    GotoStmt(int &);
+    virtual ~GotoStmt()=default;
+    virtual void execute(EvalState &state, Program &program);
+
+private:
+    int TargetLineNumber;
+
+};
+
+class IfGotoStmt : public Statement {
+
+public:
+    IfGotoStmt(Expression *,Expression *,std::string &, int);
+    virtual ~IfGotoStmt();
+    virtual void execute(EvalState &state, Program &program);
+
+private:
+    Expression *lhs, *rhs;
+    std::string op;
+    int TargetLineNumber;
+
+};
+
 
 #endif
