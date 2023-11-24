@@ -72,9 +72,11 @@ void processLine(std::string line, Program &program, EvalState &state) {
       scanner.saveToken(name);
       Expression *exp = parseExp(scanner);
       state.setValue(name,exp->eval(state));
+      delete exp;
     } else if(op_str=="PRINT") {
       Expression *exp = parseExp(scanner);
       std::cout<<exp->eval(state)<<'\n';
+      delete exp;
     } else if(op_str=="INPUT") {
       std::string name=scanner.nextToken();
       int value;
@@ -93,6 +95,7 @@ void processLine(std::string line, Program &program, EvalState &state) {
       }
       value=exp->eval(state);
       state.setValue(name,value);
+      delete exp;
     } else if(op_str=="RUN") {
       program.run(state,program);
     } else if(op_str=="LIST") {
