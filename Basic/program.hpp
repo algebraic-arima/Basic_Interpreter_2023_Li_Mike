@@ -145,6 +145,10 @@ public:
 
     void list();
 
+    void addCommandStatement(Statement *stmt);
+
+    void executeLastCommand(EvalState &state, Program &program);
+
     int cur_line=-1;
 
 private:
@@ -155,6 +159,9 @@ private:
     // lines that has been input
     std::map<int, int> lines;// lines[k]: the position in vector of the number k, k is ordered
     // lines that is current on run
+
+    std::vector<Statement *> command_statements;
+
 };
 
 #endif

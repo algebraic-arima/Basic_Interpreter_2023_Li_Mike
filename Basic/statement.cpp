@@ -50,23 +50,26 @@ InputStmt::InputStmt(std::string &_name) {
 }
 
 void InputStmt::execute(EvalState &state, Program &program) {
-  int value;
+  int value=0,value_op=1;
   std::string input_str;
-  TokenScanner ts;
-  Expression *exp;
   while(true) {
     std::cout<<" ? ";
     getline(std::cin, input_str);
-    ts.setInput(input_str);
-    exp= parseExp(ts);
-    if (exp->getType() == CONSTANT) {
-      break;
+    int i=0;
+    if(input_str[0]=='-') {value_op=-1;i=1;}
+    for(;i<input_str.size();i++) {
+      if(input_str[i]>'9'||input_str[i]<'0') {
+        error("INVALID NUMBER");
+        break;
+      }
+      value=value*10+input_str[i]-'0';
     }
-    error("INVALID NUMBER");
+    if(i==input_str.size()) {
+      value*=value_op;break;
+    }
+    value=0,value_op=1;
   }
-  value=exp->eval(state);
   state.setValue(name,value);
-  delete exp;
 }
 
 void EndStmt::execute(EvalState &state, Program &program) {

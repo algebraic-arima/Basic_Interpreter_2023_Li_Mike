@@ -70,32 +70,33 @@ void processLine(std::string line, Program &program, EvalState &state) {
       }
       std::string name=scanner.nextToken();
       scanner.saveToken(name);
-      Expression *exp = parseExp(scanner);
-      state.setValue(name,exp->eval(state));
-      delete exp;
+      program.addCommandStatement(new AssignStmt(name, parseExp(scanner)));
+      program.executeLastCommand(state,program);
     } else if(op_str=="PRINT") {
-      Expression *exp = parseExp(scanner);
-      std::cout<<exp->eval(state)<<'\n';
-      delete exp;
+      program.addCommandStatement(new PrintStmt(parseExp(scanner)));
+      program.executeLastCommand(state,program);
     } else if(op_str=="INPUT") {
       std::string name=scanner.nextToken();
-      int value;
+      int value=0,value_op=1;
       std::string input_str;
-      TokenScanner ts;
-      Expression *exp;
       while(true) {
         std::cout<<" ? ";
         getline(std::cin, input_str);
-        ts.setInput(input_str);
-        exp = parseExp(ts);
-        if (exp->getType() == CONSTANT) {
-          break;
+        int i=0;
+        if(input_str[0]=='-') {value_op=-1;i=1;}
+        for(;i<input_str.size();i++) {
+          if(input_str[i]>'9'||input_str[i]<'0') {
+            std::cout<<"INVALID NUMBER\n";
+            break;
+          }
+          value=value*10+input_str[i]-'0';
         }
-        error("INVALID NUMBER");
+        if(i==input_str.size()) {
+          value*=value_op;break;
+        }
+        value=0,value_op=1;
       }
-      value=exp->eval(state);
       state.setValue(name,value);
-      delete exp;
     } else if(op_str=="RUN") {
       program.run(state,program);
     } else if(op_str=="LIST") {
@@ -125,11 +126,12 @@ void processLine(std::string line, Program &program, EvalState &state) {
     if(op_str=="REM") {
       program.setParsedStatement(line_number,new RemStmt());
     } else if(op_str=="LET") {
-      std::string name=scanner.nextToken();
-      std::string as=scanner.nextToken();
-      if(as!="=") {
-        error("SYNTAX ERROR");return;
+      if(!scanner.hasMoreTokens()) {
+        error("SYNTAX ERROR");
+        return;
       }
+      std::string name=scanner.nextToken();
+      scanner.saveToken(name);
       program.setParsedStatement(line_number,new AssignStmt(name, parseExp(scanner)));
     } else if(op_str=="PRINT") {
       program.setParsedStatement(line_number,new PrintStmt(parseExp(scanner)));
