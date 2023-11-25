@@ -18,13 +18,13 @@ Program::~Program() = default;
 
 void Program::clear() {
     cur_line=-1;
-    line_numbers.clear();
-    line_strings.clear();
+    line_numbers.clear();//vector
+    line_strings.clear();//vector
     for(auto i:line_statements) {
-      delete i;
+      delete i; //Statement *
     }
-    line_statements.clear();
-    lines.clear();
+    line_statements.clear();//vector<Statement *>
+    lines.clear();//map int -> int
 }
 
 void Program::addSourceLine(int lineNumber, const std::string &line) {
