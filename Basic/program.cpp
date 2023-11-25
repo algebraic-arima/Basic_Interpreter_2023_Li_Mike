@@ -17,18 +17,18 @@ Program::Program() = default;
 Program::~Program() = default;
 
 void Program::clear() {
-    cur_line=-1;
-    line_numbers.clear();//vector
-    line_strings.clear();//vector
-    for(auto i:line_statements) {
-      delete i; //Statement *
-    }
-    line_statements.clear();//vector<Statement *>
-    for(auto i :command_statements) {
-      delete i;
-    }
-    command_statements.clear();
-    lines.clear();//map int -> int
+  cur_line = -1;
+  line_numbers.clear();//vector
+  line_strings.clear();//vector
+  for (auto i: line_statements) {
+    delete i; //Statement *
+  }
+  line_statements.clear();//vector<Statement *>
+  for (auto i: command_statements) {
+    delete i;
+  }
+  command_statements.clear();
+  lines.clear();//map int -> int
 }
 
 void Program::addSourceLine(int lineNumber, const std::string &line) {
@@ -56,8 +56,8 @@ void Program::removeSourceLine(int lineNumber) {
 }
 
 std::string Program::getSourceLine(int lineNumber) {
-  auto it=lines.find(lineNumber);
-  if(it==lines.end()) return "";
+  auto it = lines.find(lineNumber);
+  if (it == lines.end()) return "";
   else {
     return line_strings[lines[lineNumber]];
   }
@@ -105,15 +105,16 @@ void Program::run(EvalState &state, Program &program) {
   cur_line = getFirstLineNumber();
   while (true) {
     line_statements[lines[cur_line]]->execute(state, program);//execute can change the cur_line
+    if (cur_line == -1) return;
     cur_line = getNextLineNumber(cur_line);
-    if(cur_line==-1) return;
+    if (cur_line == -1) return;
   }
 }
 
 void Program::list() {
-  auto it=lines.begin();
-  for(;it!=lines.end();it++) {
-    std::cout<<getSourceLine((*it).first)<<'\n';
+  auto it = lines.begin();
+  for (; it != lines.end(); it++) {
+    std::cout << getSourceLine((*it).first) << '\n';
   }
 }
 
@@ -123,5 +124,5 @@ void Program::addCommandStatement(Statement *stmt) {
 
 
 void Program::executeLastCommand(EvalState &state, Program &program) {
-  command_statements.back()->execute(state,program);
+  command_statements.back()->execute(state, program);
 }

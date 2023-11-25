@@ -446,3 +446,17 @@ bool TokenScanner::isOperatorPrefix(std::string op) {
     }
     return false;
 }
+
+void TokenScanner::inverseStack() {
+  StringCell *inversedTokens = nullptr;
+  std::string str;
+  while (savedTokens != nullptr) {
+    str = nextToken();
+    StringCell *cp = new StringCell;
+    cp->str = str;
+    cp->link = inversedTokens;
+    inversedTokens = cp;
+  }
+  delete savedTokens;
+  savedTokens = inversedTokens;
+}

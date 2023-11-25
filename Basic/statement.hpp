@@ -88,8 +88,10 @@ public:
 class RemStmt : public Statement {
 
 public:
-    RemStmt()= default;
-    virtual ~RemStmt()=default;
+    RemStmt() = default;
+
+    virtual ~RemStmt() = default;
+
     virtual void execute(EvalState &state, Program &program) {};
 
 };
@@ -98,7 +100,9 @@ class AssignStmt : public Statement {
 
 public:
     AssignStmt(std::string &, Expression *);
+
     virtual ~AssignStmt();
+
     virtual void execute(EvalState &state, Program &program);
 
 private:
@@ -111,7 +115,9 @@ class PrintStmt : public Statement {
 
 public:
     PrintStmt(Expression *);
+
     virtual ~PrintStmt();
+
     virtual void execute(EvalState &state, Program &program);
 
 private:
@@ -123,7 +129,9 @@ class InputStmt : public Statement {
 
 public:
     InputStmt(std::string &);
-    virtual ~InputStmt()=default;
+
+    virtual ~InputStmt() = default;
+
     virtual void execute(EvalState &state, Program &program);
 
 private:
@@ -134,8 +142,10 @@ private:
 class EndStmt : public Statement {
 
 public:
-    EndStmt()=default;
-    virtual ~EndStmt()=default;
+    EndStmt() = default;
+
+    virtual ~EndStmt() = default;
+
     virtual void execute(EvalState &state, Program &program);
 
 };
@@ -144,7 +154,9 @@ class GotoStmt : public Statement {
 
 public:
     GotoStmt(int &);
-    virtual ~GotoStmt()=default;
+
+    virtual ~GotoStmt() = default;
+
     virtual void execute(EvalState &state, Program &program);
 
 private:
@@ -155,8 +167,10 @@ private:
 class IfGotoStmt : public Statement {
 
 public:
-    IfGotoStmt(Expression *,Expression *,std::string &, int);
+    IfGotoStmt(Expression *, Expression *, std::string &, int);
+
     virtual ~IfGotoStmt();
+
     virtual void execute(EvalState &state, Program &program);
 
 private:
@@ -165,6 +179,5 @@ private:
     int TargetLineNumber;
 
 };
-
 
 #endif

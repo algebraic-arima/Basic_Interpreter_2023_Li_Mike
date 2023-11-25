@@ -297,6 +297,9 @@ public:
 
     std::string getStringValue(std::string token) const;
 
+    //inverse the token stack
+    void inverseStack();
+
 /* Private section */
 
 /**********************************************************************/
