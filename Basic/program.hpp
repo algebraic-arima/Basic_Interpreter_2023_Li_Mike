@@ -149,7 +149,7 @@ public:
 
     void executeLastCommand(EvalState &state, Program &program);
 
-    int cur_line=-1;
+    int cur_line = -1;
 
 private:
 

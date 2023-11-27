@@ -22,21 +22,21 @@ void processLine(std::string line, Program &program, EvalState &state);
 /* Main program */
 
 int main() {
-    EvalState state;
-    Program program;
-    //cout << "Stub implementation of BASIC" << endl;
-    while (true) {
-        try {
-            std::string input;
-            getline(std::cin, input);
-            if (input.empty())
-                return 0;
-            processLine(input, program, state);
-        } catch (ErrorException &ex) {
-            std::cout << ex.getMessage() << std::endl;
-        }
+  EvalState state;
+  Program program;
+  //cout << "Stub implementation of BASIC" << endl;
+  while (true) {
+    try {
+      std::string input;
+      getline(std::cin, input);
+      if (input.empty())
+        return 0;
+      processLine(input, program, state);
+    } catch (ErrorException &ex) {
+      std::cout << ex.getMessage() << std::endl;
     }
-    return 0;
+  }
+  return 0;
 }
 
 /*
@@ -57,119 +57,124 @@ void processLine(std::string line, Program &program, EvalState &state) {
   scanner.scanNumbers();
   scanner.setInput(line);
 
-  std::string op_str=scanner.nextToken();
-  bool is_temp=true;//the line is a temporary statement
-  if(scanner.getTokenType(op_str)==NUMBER) {
-    is_temp=false;
+  std::string op_str = scanner.nextToken();
+  bool is_temp = true;//the line is a temporary statement
+  if (scanner.getTokenType(op_str) == NUMBER) {
+    is_temp = false;
   }
-  if(is_temp) {
-    if(op_str=="LET") {
-      if(!scanner.hasMoreTokens()) {
+  if (is_temp) {
+    if (op_str == "LET") {
+      if (!scanner.hasMoreTokens()) {
         error("SYNTAX ERROR");
         return;
       }
-      std::string name=scanner.nextToken();
+      std::string name = scanner.nextToken();
       scanner.saveToken(name);
       program.addCommandStatement(new AssignStmt(name, parseExp(scanner)));
-      program.executeLastCommand(state,program);
-    } else if(op_str=="PRINT") {
+      program.executeLastCommand(state, program);
+    } else if (op_str == "PRINT") {
       program.addCommandStatement(new PrintStmt(parseExp(scanner)));
-      program.executeLastCommand(state,program);
-    } else if(op_str=="INPUT") {
-      std::string name=scanner.nextToken();
-      int value=0,value_op=1;
+      program.executeLastCommand(state, program);
+    } else if (op_str == "INPUT") {
+      std::string name = scanner.nextToken();
+      int value = 0, value_op = 1;
       std::string input_str;
-      while(true) {
-        std::cout<<" ? ";
+      while (true) {
+        std::cout << " ? ";
         getline(std::cin, input_str);
-        int i=0;
-        if(input_str[0]=='-') {value_op=-1;i=1;}
-        for(;i<input_str.size();i++) {
-          if(input_str[i]>'9'||input_str[i]<'0') {
-            std::cout<<"INVALID NUMBER\n";
+        int i = 0;
+        if (input_str[0] == '-') {
+          value_op = -1;
+          i = 1;
+        }
+        for (; i < input_str.size(); i++) {
+          if (input_str[i] > '9' || input_str[i] < '0') {
+            std::cout << "INVALID NUMBER\n";
             break;
           }
-          value=value*10+input_str[i]-'0';
+          value = value * 10 + input_str[i] - '0';
         }
-        if(i==input_str.size()) {
-          value*=value_op;break;
+        if (i == input_str.size()) {
+          value *= value_op;
+          break;
         }
-        value=0,value_op=1;
+        value = 0, value_op = 1;
       }
-      state.setValue(name,value);
-    } else if(op_str=="RUN") {
-      program.run(state,program);
-    } else if(op_str=="LIST") {
+      state.setValue(name, value);
+    } else if (op_str == "RUN") {
+      program.run(state, program);
+    } else if (op_str == "LIST") {
       program.list();
-    } else if(op_str=="CLEAR") {
+    } else if (op_str == "CLEAR") {
       program.clear();
       state.Clear();
-    } else if(op_str=="QUIT") {
+    } else if (op_str == "QUIT") {
       program.clear();
       state.Clear();
       exit(0);
-    } else if(op_str=="HELP") {
-      std::cout<<"Learn it yourself, do not count on anyone!\n";
+    } else if (op_str == "HELP") {
+      std::cout << "ざぁーこ～♡\n";
     } else {
       error("SYNTAX ERROR");
     }
-  }
-  else {
-    int line_number=stringToInteger(op_str);
+  } else {
+    int line_number = stringToInteger(op_str);
     if (!scanner.hasMoreTokens()) {
       program.removeSourceLine(line_number);
       return;
     } else {
       program.addSourceLine(line_number, line);
     }
-    op_str=scanner.nextToken();
-    if(op_str=="REM") {
-      program.setParsedStatement(line_number,new RemStmt());
-    } else if(op_str=="LET") {
-      if(!scanner.hasMoreTokens()) {
+    op_str = scanner.nextToken();
+    if (op_str == "REM") {
+      program.setParsedStatement(line_number, new RemStmt());
+    } else if (op_str == "LET") {
+      if (!scanner.hasMoreTokens()) {
         error("SYNTAX ERROR");
         return;
       }
-      std::string name=scanner.nextToken();
+      std::string name = scanner.nextToken();
       scanner.saveToken(name);
-      program.setParsedStatement(line_number,new AssignStmt(name, parseExp(scanner)));
-    } else if(op_str=="PRINT") {
-      program.setParsedStatement(line_number,new PrintStmt(parseExp(scanner)));
-    } else if(op_str=="INPUT") {
-      std::string name=scanner.nextToken();
-      program.setParsedStatement(line_number,new InputStmt(name));
-    } else if (op_str=="END") {
-      program.setParsedStatement(line_number,new EndStmt());
-    } else if(op_str=="GOTO") {
-      int target= stringToInteger(scanner.nextToken());
-      program.setParsedStatement(line_number,new GotoStmt(target));
-    } else if (op_str=="IF") {
-      TokenScanner l_scanner,r_scanner;
+      program.setParsedStatement(line_number, new AssignStmt(name, parseExp(scanner)));
+    } else if (op_str == "PRINT") {
+      program.setParsedStatement(line_number, new PrintStmt(parseExp(scanner)));
+    } else if (op_str == "INPUT") {
+      std::string name = scanner.nextToken();
+      program.setParsedStatement(line_number, new InputStmt(name));
+    } else if (op_str == "END") {
+      program.setParsedStatement(line_number, new EndStmt());
+    } else if (op_str == "GOTO") {
+      int target = stringToInteger(scanner.nextToken());
+      program.setParsedStatement(line_number, new GotoStmt(target));
+    } else if (op_str == "IF") {
+      TokenScanner l_scanner, r_scanner;
       l_scanner.ignoreWhitespace();
       l_scanner.scanNumbers();
       r_scanner.ignoreWhitespace();
       r_scanner.scanNumbers();
-      std::string str=scanner.nextToken();
-      while(str!="<"&&str!="="&&str!=">") {
+      std::string str = scanner.nextToken();
+      while (str != "<" && str != "=" && str != ">") {
         l_scanner.saveToken(str);
-        str=scanner.nextToken();
+        //std::cout<<str<<" ";
+        str = scanner.nextToken();
       }
-      std::string op=str;
-      Expression *lhs= parseExp(l_scanner);
-      while(str!="THEN") {
+      std::string op = str;
+      l_scanner.inverseStack();
+      Expression *lhs = parseExp(l_scanner);
+      str = scanner.nextToken();
+      while (str != "THEN") {
         r_scanner.saveToken(str);
-        str=scanner.nextToken();
+        //std::cout<<str<<" ";
+        str = scanner.nextToken();
       }
-      Expression *rhs=parseExp(r_scanner);
-      str=scanner.nextToken();
-      int target= stringToInteger(str);
-      program.setParsedStatement(line_number,new IfGotoStmt(lhs,rhs,op,target));
+      r_scanner.inverseStack();
+      Expression *rhs = parseExp(r_scanner);
+      str = scanner.nextToken();
+      int target = stringToInteger(str);
+      program.setParsedStatement(line_number, new IfGotoStmt(lhs, rhs, op, target));
     } else {
       program.removeSourceLine(line_number);
       error("SYNTAX ERROR");
     }
-
   }
-
 }
-
