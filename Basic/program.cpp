@@ -24,6 +24,10 @@ void Program::clear() {
       delete i; //Statement *
     }
     line_statements.clear();//vector<Statement *>
+    for(auto i :command_statements) {
+      delete i;
+    }
+    command_statements.clear();
     lines.clear();//map int -> int
 }
 
@@ -113,4 +117,11 @@ void Program::list() {
   }
 }
 
+void Program::addCommandStatement(Statement *stmt) {
+  command_statements.push_back(stmt);
+}
 
+
+void Program::executeLastCommand(EvalState &state, Program &program) {
+  command_statements.back()->execute(state,program);
+}
