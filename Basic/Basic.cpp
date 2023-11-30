@@ -113,7 +113,7 @@ void processLine(std::string line, Program &program, EvalState &state) {
       state.Clear();
       exit(0);
     } else if (op_str == "HELP") {
-      std::cout << "ざぁーこ～♡\n";
+      std::cout << "Do It Yourself\n";
     } else {
       error("SYNTAX ERROR");
     }
