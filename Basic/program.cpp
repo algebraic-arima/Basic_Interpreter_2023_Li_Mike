@@ -85,6 +85,7 @@ Statement *Program::getParsedStatement(int lineNumber) {
       line_statements.resize(lines[lineNumber] + 1);
     return line_statements[lines[lineNumber]];
   }
+  return nullptr;
 }
 
 int Program::getFirstLineNumber() {
